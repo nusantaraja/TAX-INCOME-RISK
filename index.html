@@ -1,0 +1,1148 @@
+
+<!DOCTYPE html>
+<html lang="id">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Analisis Dampak Fokus Pendapatan Negara dari Pajak: Studi Kasus Indonesia</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Vanta.js for background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.waves.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'serif': ['Crimson Text', 'serif'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'navy': {
+                            50: '#f0f4f8',
+                            100: '#d9e2ec',
+                            200: '#bcccdc',
+                            300: '#9fb3c8',
+                            400: '#829ab1',
+                            500: '#627d98',
+                            600: '#486581',
+                            700: '#334e68',
+                            800: '#243b53',
+                            900: '#102a43',
+                            950: '#0a1929'
+                        },
+                        'warm': {
+                            50: '#fdf8f6',
+                            100: '#f2e8e5',
+                            200: '#eaddd7',
+                            300: '#e0cec7',
+                            400: '#d2bab0',
+                            500: '#bfa094',
+                            600: '#a18072',
+                            700: '#977669',
+                            800: '#846358',
+                            900: '#43302b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(16, 42, 67, 0.95) 0%, rgba(52, 78, 104, 0.85) 100%);
+        }
+        
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .citation {
+            display: inline-block;
+            background: #102a43;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            text-decoration: none;
+            margin-left: 2px;
+            transition: all 0.2s ease;
+        }
+        
+        .citation:hover {
+            background: #243b53;
+            transform: translateY(-1px);
+        }
+        
+        .toc-fixed {
+            position: fixed;
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 280px;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .content-main {
+            margin-left: 320px;
+            max-width: calc(100vw - 360px);
+        }
+        
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(90deg, #102a43 0%, #334e68 50%, #102a43 100%);
+            margin: 3rem 0;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(240, 244, 248, 0.8) 0%, rgba(217, 226, 236, 0.6) 100%);
+            border-left: 4px solid #102a43;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 2rem 0;
+        }
+        
+        @media (max-width: 1280px) {
+            .toc-fixed {
+                position: relative;
+                left: auto;
+                top: auto;
+                transform: none;
+                width: 100%;
+                margin-bottom: 2rem;
+            }
+            .content-main {
+                margin-left: 0;
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .toc-fixed {
+                width: calc(100% - 2rem);
+                margin: 0 1rem 2rem 1rem;
+            }
+        }
+        
+        .vanta-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* Scrollbar styling */
+        .toc-fixed::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .toc-fixed::-webkit-scrollbar-track {
+            background: rgba(217, 226, 236, 0.5);
+            border-radius: 3px;
+        }
+        
+        .toc-fixed::-webkit-scrollbar-thumb {
+            background: #334e68;
+            border-radius: 3px;
+        }
+    </style>
+  </head>
+
+  <body class="bg-warm-50 text-navy-900 font-sans">
+
+    <!-- Fixed Table of Contents -->
+    <nav class="toc-fixed p-6">
+      <div class="mb-4">
+        <h3 class="text-lg font-semibold text-navy-900 mb-2">Daftar Isi</h3>
+        <div class="w-12 h-0.5 bg-navy-600"></div>
+      </div>
+      <ul class="space-y-2 text-sm">
+        <li>
+          <a class="block py-1 px-2 text-navy-700 hover:text-navy-900 hover:bg-navy-50 rounded transition-colors" href="#executive-summary">Executive Summary</a>
+        </li>
+        <li>
+          <a class="block py-1 px-2 text-navy-700 hover:text-navy-900 hover:bg-navy-50 rounded transition-colors" href="#macro-impact">Dampak Ekonomi Makro</a>
+        </li>
+        <li>
+          <a class="block py-1 px-2 text-navy-700 hover:text-navy-900 hover:bg-navy-50 rounded transition-colors" href="#social-impact">Dampak Sosial</a>
+        </li>
+        <li>
+          <a class="block py-1 px-2 text-navy-700 hover:text-navy-900 hover:bg-navy-50 rounded transition-colors" href="#sector-impact">Dampak Sektor Tertentu</a>
+        </li>
+        <li>
+          <a class="block py-1 px-2 text-navy-700 hover:text-navy-900 hover:bg-navy-50 rounded transition-colors" href="#fiscal-impact">Dampak Fiskal</a>
+        </li>
+        <li>
+          <a class="block py-1 px-2 text-navy-700 hover:text-navy-900 hover:bg-navy-50 rounded transition-colors" href="#comparison">Perbandingan Internasional</a>
+        </li>
+        <li>
+          <a class="block py-1 px-2 text-navy-700 hover:text-navy-900 hover:bg-navy-50 rounded transition-colors" href="#tax-types">Jenis Pajak Tertentu</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="content-main">
+
+      <!-- Hero Section -->
+      <section class="relative min-h-screen flex items-center">
+        <div class="vanta-canvas" id="vanta-bg"></div>
+        <div class="hero-bg absolute inset-0"></div>
+
+        <div class="hero-content container mx-auto px-4 sm:px-6 md:px-8 py-16">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif italic text-white leading-tight mb-6 break-words">
+                Analisis Dampak Fokus Pendapatan Negara dari Pajak
+              </h1>
+              <p class="text-lg sm:text-xl text-warm-100 mb-8 leading-relaxed break-words">
+                Studi Kasus Indonesia: Menyelami Kompleksitas Ekonomi, Sosial, dan Fiskal dari Ketergantungan pada Penerimaan Pajak
+              </p>
+              <div class="flex flex-wrap gap-4 text-sm text-warm-200">
+                <span class="flex items-center"><i class="fas fa-chart-line mr-2"></i>Analisis Ekonomi Makro</span>
+                <span class="flex items-center"><i class="fas fa-users mr-2"></i>Dampak Sosial</span>
+                <span class="flex items-center"><i class="fas fa-building mr-2"></i>Sektor Usaha</span>
+              </div>
+            </div>
+
+            <div class="bento-grid">
+              <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+                <div class="text-3xl font-bold text-white mb-2">64.6%</div>
+                <div class="text-warm-100 text-sm">Kontribusi Pajak terhadap Penerimaan Negara</div>
+              </div>
+              <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+                <div class="text-3xl font-bold text-white mb-2">0.94%</div>
+                <div class="text-warm-100 text-sm">Potensi Kenaikan Pengangguran akibat PPN 12%</div>
+              </div>
+              <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+                <div class="text-3xl font-bold text-white mb-2">11.5%</div>
+                <div class="text-warm-100 text-sm">Rasio Pajak Indonesia vs ASEAN</div>
+              </div>
+              <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+                <div class="text-3xl font-bold text-white mb-2">1.41%</div>
+                <div class="text-warm-100 text-sm">Penurunan Ekspor akibat Kenaikan PPN</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Executive Summary -->
+      <section class="py-16 px-4 sm:px-6 md:px-8" id="executive-summary">
+        <div class="container mx-auto max-w-4xl">
+          <div class="highlight-box p-8 rounded-lg mb-12">
+            <h2 class="text-3xl font-serif font-semibold text-navy-900 mb-6">Executive Summary</h2>
+            <div class="prose prose-lg max-w-none">
+              <p class="text-lg leading-relaxed mb-4">
+                Fokus pendapatan negara yang berlebihan pada sektor pajak, terutama melalui peningkatan tarif, memiliki dampak yang kompleks dan beragam terhadap perekonomian Indonesia. Di satu sisi, pajak merupakan sumber utama pendanaan pembangunan, namun di sisi lain, kebijakan pajak yang tidak hati-hati dapat menghambat pertumbuhan ekonomi, meningkatkan inflasi dan pengangguran, serta memperparah ketimpangan dan kemiskinan.
+              </p>
+              <p class="text-lg leading-relaxed mb-4">
+                Kenaikan Pajak Pertambahan Nilai (PPN) menjadi 12%, misalnya, diperkirakan dapat menyebabkan PHK bagi ratusan ribu pekerja, menurunkan daya beli masyarakat, dan melambatkan pertumbuhan ekonomi. Oleh karena itu, pemerintah perlu menyeimbangkan kebutuhan penerimaan negara dengan dampak sosial-ekonomi yang ditimbulkan, serta terus melakukan reformasi perpajakan untuk menciptakan sistem yang lebih adil, efisien, dan berkelanjutan.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Dampak Ekonomi Makro -->
+      <section class="py-16 px-8" id="macro-impact">
+        <div class="container mx-auto max-w-6xl">
+          <h2 class="text-4xl font-serif font-semibold text-navy-900 mb-12 text-center">Dampak Ekonomi Makro dari Fokus Pajak</h2>
+
+          <!-- Pengangguran -->
+          <div class="mb-16">
+            <h3 class="text-3xl font-serif font-medium text-navy-800 mb-8">1.1 Pengangguran</h3>
+
+            <div class="grid lg:grid-cols-2 gap-8 mb-8">
+              <div>
+                <h4 class="text-xl font-semibold text-navy-700 mb-4">Kenaikan PPN dan Risiko PHK</h4>
+                <p class="text-navy-600 mb-4">
+                  Kebijakan fiskal yang berorientasi pada peningkatan penerimaan negara, khususnya melalui kenaikan tarif Pajak Pertambahan Nilai (PPN), memiliki potensi signifikan untuk memicu kenaikan angka pengangguran di Indonesia. Peningkatan tarif PPN dari 11% menjadi 12% yang direncanakan pemerintah pada tahun 2025, meskipun bertujuan untuk meningkatkan rasio pajak, diperkirakan akan menciptakan gelombang efek samping yang merugikan, termasuk risiko pemutusan hubungan kerja (PHK) massal.
+                  <a class="citation" href="#ref-187">187</a>
+                </p>
+                <p class="text-navy-600">
+                  Analis dari Institute for Development of Economics and Finance (Indef), Esther Sri Astuti, memperingatkan bahwa kebijakan ini akan memicu serangkaian konsekuensi negatif, mulai dari kenaikan biaya hidup, inflasi, hingga melemahnya daya beli masyarakat. Dalam kondisi seperti ini, perusahaan akan terpaksa melakukan efisiensi biaya, dan salah satu langkah yang paling mungkin diambil adalah dengan melakukan PHK untuk menekan pengeluaran operasional.
+                  <a class="citation" href="#ref-187">187</a>
+                </p>
+              </div>
+
+              <div class="bg-navy-50 p-6 rounded-lg">
+                <h5 class="font-semibold text-navy-800 mb-3">Estimasi Dampak Kenaikan PPN 12%</h5>
+                <ul class="space-y-2 text-sm text-navy-600">
+                  <li class="flex justify-between">
+                    <span>Kenaikan pengangguran</span>
+                    <span class="font-semibold">0.94%</span>
+                  </li>
+                  <li class="flex justify-between">
+                    <span>Penurunan pendapatan riil</span>
+                    <span class="font-semibold">0.96%</span>
+                  </li>
+                  <li class="flex justify-between">
+                    <span>Penurunan ekspor</span>
+                    <span class="font-semibold">1.41%</span>
+                  </li>
+                  <li class="flex justify-between">
+                    <span>Kenaikan harga sektor jasa</span>
+                    <span class="font-semibold">0.81%</span>
+                  </li>
+                  <li class="flex justify-between">
+                    <span>Kenaikan harga makanan &amp; minuman</span>
+                    <span class="font-semibold">0.71%</span>
+                  </li>
+                </ul>
+                <div class="text-xs text-navy-500 mt-3">Sumber: Indef
+                  <a class="citation" href="#ref-280">280</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-warm-50 p-6 rounded-lg mb-8">
+              <h5 class="font-semibold text-navy-800 mb-3">Mekanisme Transmisi: Dari Pajak ke Pengangguran</h5>
+              <div class="grid md:grid-cols-3 gap-4 text-sm">
+                <div class="text-center">
+                  <div class="w-12 h-12 bg-navy-600 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+                    <i class="fas fa-arrow-up"></i>
+                  </div>
+                  <div class="font-semibold text-navy-700">Sisi Penawaran</div>
+                  <p class="text-navy-600">Kenaikan PPN → Biaya produksi naik → Harga jual meningkat</p>
+                </div>
+                <div class="text-center">
+                  <div class="w-12 h-12 bg-navy-600 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+                    <i class="fas fa-arrow-down"></i>
+                  </div>
+                  <div class="font-semibold text-navy-700">Sisi Permintaan</div>
+                  <p class="text-navy-600">Harga naik → Daya beli turun → Permintaan menurun</p>
+                </div>
+                <div class="text-center">
+                  <div class="w-12 h-12 bg-navy-600 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+                    <i class="fas fa-users-slash"></i>
+                  </div>
+                  <div class="font-semibold text-navy-700">Efek Ketenagakerjaan</div>
+                  <p class="text-navy-600">Pendapatan perusahaan turun → Efisiensi → PHK</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Inflasi dan Daya Beli -->
+          <div class="mb-16">
+            <h3 class="text-3xl font-serif font-medium text-navy-800 mb-8">1.2 Inflasi dan Daya Beli</h3>
+
+            <div class="grid lg:grid-cols-2 gap-8 mb-8">
+              <div>
+                <h4 class="text-xl font-semibold text-navy-700 mb-4">Tekanan Inflasi dari Kenaikan Pajak</h4>
+                <p class="text-navy-600 mb-4">
+                  Kenaikan tarif Pajak Pertambahan Nilai (PPN) secara langsung dapat menimbulkan tekanan inflasi, yang dikenal sebagai inflasi biaya (cost-push inflation). Ketika pemerintah menaikkan tarif PPN, beban pajak yang lebih tinggi pada produsen akan diteruskan ke konsumen dalam bentuk kenaikan harga barang dan jasa.
+                  <a class="citation" href="#ref-273">273</a>
+                </p>
+                <p class="text-navy-600">
+                  Sebagai contoh, ketika PPN dinaikkan dari 10% menjadi 11% pada April 2022, inflasi tahunan naik sebesar 0,95 poin persentase. Studi dari Indef memperkirakan bahwa kenaikan PPN menjadi 12% akan mendorong kenaikan harga di berbagai sektor.
+                  <a class="citation" href="#ref-280">280</a>
+                </p>
+              </div>
+
+              <div>
+                <h4 class="text-xl font-semibold text-navy-700 mb-4">Penurunan Daya Beli Konsumen</h4>
+                <p class="text-navy-600 mb-4">
+                  Kenaikan pajak, terutama Pajak Pertambahan Nilai (PPN) yang bersifat tidak langsung, memiliki dampak yang paling langsung dan terasa bagi konsumen dalam bentuk penurunan daya beli. Ketika tarif PPN dinaikkan, harga hampir semua barang dan jasa akan mengalami kenaikan.
+                  <a class="citation" href="#ref-273">273</a>
+                </p>
+                <p class="text-navy-600">
+                  Pakar Ekonomi dari Universitas Muhammadiyah Surabaya, Arin Setyowati, menyatakan bahwa kenaikan PPN menjadi 12% akan langsung meningkatkan harga barang dan jasa, yang pada gilirannya akan menurunkan daya beli masyarakat, terutama dari kelas bawah.
+                </p>
+              </div>
+            </div>
+
+            <div class="bg-navy-50 p-6 rounded-lg">
+              <h5 class="font-semibold text-navy-800 mb-4">Dampak pada Ekspor dan Neraca Perdagangan</h5>
+              <p class="text-navy-600 mb-4">
+                Kebijakan fiskal yang berfokus pada peningkatan pajak, khususnya Pajak Pertambahan Nilai (PPN), juga dapat berdampak pada sektor ekspor dan neraca perdagangan secara keseluruhan. Meskipun PPN untuk barang ekspor umumnya adalah 0%, kenaikan PPN pada input produksi tetap akan meningkatkan biaya produksi secara keseluruhan.
+              </p>
+              <div class="bg-white p-4 rounded border-l-4 border-navy-600">
+                <p class="text-navy-700 font-medium">
+                  Sebuah studi dari Institute for Development of Economics and Finance (Indef) memperkirakan bahwa kenaikan PPN menjadi 12% dapat menurunkan ekspor Indonesia sebesar 1,41%.
+                  <a class="citation" href="#ref-280">280</a>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pertumbuhan Ekonomi -->
+          <div class="mb-16">
+            <h3 class="text-3xl font-serif font-medium text-navy-800 mb-8">1.3 Pertumbuhan Ekonomi</h3>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+              <div>
+                <h4 class="text-xl font-semibold text-navy-700 mb-4">Potensi Hambatan Pertumbuhan dari Pajak Tinggi</h4>
+                <p class="text-navy-600 mb-4">
+                  Fokus pendapatan negara yang berlebihan pada pajak, terutama dengan tarif yang tinggi, berpotensi menjadi hambatan bagi pertumbuhan ekonomi. Pajak yang tinggi dapat menekan aktivitas ekonomi melalui berbagai saluran.
+                </p>
+                <ul class="list-disc list-inside text-navy-600 space-y-2">
+                  <li>Pajak yang tinggi dapat mengurangi insentif untuk bekerja, menabung, dan berinvestasi</li>
+                  <li>Pajak tidak langsung seperti PPN yang tinggi dapat menurunkan daya beli masyarakat</li>
+                  <li>Konsumsi rumah tangga merupakan komponen terbesar dalam PDB Indonesia (55-60%)</li>
+                  <li>Pajak yang tinggi juga dapat menurunkan daya saing ekonomi secara keseluruhan</li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 class="text-xl font-semibold text-navy-700 mb-4">Peran Pajak dalam Pendanaan Pembangunan</h4>
+                <p class="text-navy-600 mb-4">
+                  Di sisi lain, pajak juga memiliki peran yang sangat penting dalam mendorong pertumbuhan ekonomi, terutama melalui pendanaan pembangunan. Penerimaan dari pajak merupakan sumber utama pendanaan bagi anggaran negara, yang digunakan untuk membiayai berbagai program dan proyek pembangunan.
+                </p>
+                <div class="bg-warm-50 p-4 rounded-lg">
+                  <p class="text-navy-700 text-sm">
+                    <strong>Investasi strategis dari pajak:</strong> Infrastruktur, pendidikan, kesehatan, konektivitas, efisiensi ekonomi, dan peningkatan kualitas sumber daya manusia.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Dampak Sosial -->
+      <section class="py-16 px-8 bg-warm-50" id="social-impact">
+        <div class="container mx-auto max-w-6xl">
+          <h2 class="text-4xl font-serif font-semibold text-navy-900 mb-12 text-center">Dampak Sosial: Ketimpangan dan Kemiskinan</h2>
+
+          <div class="grid lg:grid-cols-2 gap-12">
+            <!-- Ketimpangan Pendapatan -->
+            <div>
+              <h3 class="text-2xl font-serif font-medium text-navy-800 mb-6">2.1 Ketimpangan Pendapatan</h3>
+
+              <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                  <h4 class="text-lg font-semibold text-navy-700 mb-3">Sistem Pajak yang Tidak Progresif</h4>
+                  <p class="text-navy-600 text-sm mb-3">
+                    Salah satu dampak sosial yang paling signifikan dari fokus pendapatan negara pada pajak adalah potensi meningkatnya ketimpangan pendapatan, yang disebabkan oleh sistem pajak yang tidak progresif atau bahkan regresif. Sebagian besar penerimaan pajak berasal dari pajak tidak langsung seperti Pajak Pertambahan Nilai (PPN) dan cukai, yang sifatnya regresif.
+                    <a class="citation" href="#ref-230">230</a>
+                    <a class="citation" href="#ref-239">239</a>
+                  </p>
+                  <p class="text-navy-600 text-sm">
+                    Pajak regresif berarti beban pajak yang ditanggung oleh kelompok berpenghasilan rendah lebih besar secara proporsional dibandingkan dengan kelompok berpenghasilan tinggi.
+                  </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                  <h4 class="text-lg font-semibold text-navy-700 mb-3">Dampak Pajak Penghasilan (PPh)</h4>
+                  <p class="text-navy-600 text-sm mb-3">
+                    Pajak Penghasilan (PPh) secara teoritis merupakan instrumen utama dalam kebijakan fiskal untuk mengurangi ketimpangan pendapatan. Namun, dalam praktiknya di Indonesia, efektivitas PPh dalam mengurangi kesenjangan masih terbatas.
+                    <a class="citation" href="#ref-245">245</a>
+                  </p>
+                  <div class="bg-navy-50 p-3 rounded text-xs text-navy-600">
+                    Sebuah studi simulasi menunjukkan bahwa penerapan tarif pajak tetap di bawah 9% akan meningkatkan ketimpangan pendapatan, sementara tarif di atas 10% baru mulai menunjukkan efek penurunan ketimpangan.
+                    <a class="citation" href="#ref-237">237</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Kemiskinan -->
+            <div>
+              <h3 class="text-2xl font-serif font-medium text-navy-800 mb-6">2.2 Kemiskinan</h3>
+
+              <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                  <h4 class="text-lg font-semibold text-navy-700 mb-3">Beban Pajak Indirect terhadap Masyarakat Berpenghasilan Rendah</h4>
+                  <p class="text-navy-600 text-sm mb-3">
+                    Fokus pendapatan negara pada pajak tidak langsung, seperti Pajak Pertambahan Nilai (PPN) dan cukai, memberikan dampak yang paling berat bagi masyarakat berpenghasilan rendah. Pajak tidak langsung bersifat regresif, yang berarti beban pajak yang ditanggung oleh kelompok berpenghasilan rendah lebih besar secara proporsional.
+                  </p>
+                  <p class="text-navy-600 text-sm">
+                    Masyarakat berpenghasilan rendah cenderung mengeluarkan sebagian besar, bahkan seluruh, pendapatannya untuk memenuhi kebutuhan pokok yang dikenakan pajak tidak langsung.
+                  </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                  <h4 class="text-lg font-semibold text-navy-700 mb-3">Kenaikan Biaya Hidup dan Risiko Masyarakat Miskin</h4>
+                  <p class="text-navy-600 text-sm mb-3">
+                    Kenaikan pajak, terutama pajak tidak langsung, secara langsung menyebabkan kenaikan biaya hidup. Ketika harga barang dan jasa meningkat, maka masyarakat harus mengeluarkan uang lebih banyak untuk membeli kebutuhan yang sama.
+                  </p>
+                  <div class="bg-red-50 border-l-4 border-red-400 p-3 rounded text-xs text-red-700">
+                    Bagi masyarakat miskin yang pendapatannya sangat terbatas, kenaikan biaya hidup ini merupakan tantangan yang sangat berat. Mereka mungkin harus mengurangi jumlah atau kualitas konsumsi pangan, menunda perawatan kesehatan, atau bahkan menghentikan pendidikan anak-anak mereka.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Dampak pada Sektor Tertentu -->
+      <section class="py-16 px-8" id="sector-impact">
+        <div class="container mx-auto max-w-6xl">
+          <h2 class="text-4xl font-serif font-semibold text-navy-900 mb-12 text-center">Dampak pada Sektor Tertentu</h2>
+
+          <div class="grid lg:grid-cols-3 gap-8 mb-12">
+            <!-- UMKM -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-navy-100">
+              <div class="flex items-center mb-4">
+                <div class="w-12 h-12 bg-navy-600 text-white rounded-lg flex items-center justify-center mr-4">
+                  <i class="fas fa-store"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-navy-800">3.1 UMKM</h3>
+              </div>
+
+              <div class="space-y-4">
+                <div>
+                  <h4 class="font-semibold text-navy-700 mb-2">Tantangan Kepatuhan Pajak</h4>
+                  <p class="text-sm text-navy-600">
+                    UMKM di Indonesia menghadapi tantangan yang signifikan dalam memenuhi kewajiban perpajakan. Banyak UMKM yang belum memiliki pemahaman yang memadai tentang sistem perpajakan, sehingga mereka kesulitan dalam memenuhi kewajiban administratif perpajakan.
+                    <a class="citation" href="#ref-33">33</a>
+                  </p>
+                </div>
+
+                <div>
+                  <h4 class="font-semibold text-navy-700 mb-2">Risiko Penutupan Usaha</h4>
+                  <p class="text-sm text-navy-600">
+                    Kenaikan pajak, terutama PPN, berpotensi menyebabkan penutupan usaha bagi UMKM yang memiliki margin keuntungan yang tipis. Krisis yang dialami oleh PT Sri Rejeki Isman (Sritex) yang menyebabkan perumahan 10.000 karyawan menjadi bukti nyata bagaimana tekanan ekonomi dapat berujung pada PHK massal.
+                    <a class="citation" href="#ref-223">223</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Industri Besar -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-navy-100">
+              <div class="flex items-center mb-4">
+                <div class="w-12 h-12 bg-navy-600 text-white rounded-lg flex items-center justify-center mr-4">
+                  <i class="fas fa-industry"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-navy-800">3.2 Industri Besar</h3>
+              </div>
+
+              <div class="space-y-4">
+                <div>
+                  <h4 class="font-semibold text-navy-700 mb-2">Biaya Produksi dan Investasi</h4>
+                  <p class="text-sm text-navy-600">
+                    Pajak yang tinggi dapat meningkatkan biaya produksi bagi industri besar, terutama yang menggunakan banyak input dari dalam negeri yang dikenakan PPN. Kenaikan biaya produksi ini dapat menurunkan profitabilitas perusahaan dan mengurangi dana yang tersedia untuk reinvestasi.
+                    <a class="citation" href="#ref-151">151</a>
+                  </p>
+                </div>
+
+                <div>
+                  <h4 class="font-semibold text-navy-700 mb-2">Daya Saing Industri</h4>
+                  <p class="text-sm text-navy-600">
+                    Pajak yang tinggi dapat menurunkan daya saing industri dalam negeri, baik di pasar domestik maupun internasional. Kenaikan biaya produksi akibat pajak yang lebih tinggi dapat membuat harga produk dalam negeri menjadi lebih mahal dibandingkan dengan produk impor.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Konsumen -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-navy-100">
+              <div class="flex items-center mb-4">
+                <div class="w-12 h-12 bg-navy-600 text-white rounded-lg flex items-center justify-center mr-4">
+                  <i class="fas fa-shopping-cart"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-navy-800">3.3 Konsumen</h3>
+              </div>
+
+              <div class="space-y-4">
+                <div>
+                  <h4 class="font-semibold text-navy-700 mb-2">Penurunan Konsumsi</h4>
+                  <p class="text-sm text-navy-600">
+                    Kenaikan pajak, terutama pajak konsumsi seperti PPN, secara langsung akan menyebabkan penurunan konsumsi rumah tangga. Kenaikan harga barang dan jasa akibat pajak yang lebih tinggi akan menurunkan daya beli masyarakat.
+                    <a class="citation" href="#ref-49">49</a>
+                  </p>
+                </div>
+
+                <div>
+                  <h4 class="font-semibold text-navy-700 mb-2">Dampak Berbeda pada Kelompok</h4>
+                  <p class="text-sm text-navy-600">
+                    Dampak kenaikan pajak tidak merata di semua lapisan masyarakat. Kelompok berpenghasilan rendah akan terkena dampak yang lebih parah karena mereka cenderung menghabiskan sebagian besar pendapatannya untuk konsumsi barang kebutuhan pokok.
+                    <a class="citation" href="#ref-273">273</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Dampak pada Kebijakan Fiskal -->
+      <section class="py-16 px-8 bg-navy-50" id="fiscal-impact">
+        <div class="container mx-auto max-w-6xl">
+          <h2 class="text-4xl font-serif font-semibold text-navy-900 mb-12 text-center">Dampak pada Kebijakan Fiskal dan Anggaran Negara</h2>
+
+          <div class="grid lg:grid-cols-2 gap-12">
+            <!-- Ketergantungan pada Pajak -->
+            <div>
+              <h3 class="text-2xl font-serif font-medium text-navy-800 mb-6">4.1 Ketergantungan pada Pajak</h3>
+
+              <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+                <h4 class="text-lg font-semibold text-navy-700 mb-4">Proporsi Pajak dalam Total Pendapatan Negara</h4>
+                <p class="text-navy-600 text-sm mb-4">
+                  Pajak merupakan sumber pendapatan terbesar bagi negara Indonesia. Berdasarkan data, pajak menyumbang sekitar 64,6% dari total penerimaan negara, dengan Pajak Pertambahan Nilai (PPN) sebagai salah satu kontributor utama, memberikan kontribusi sebesar 33% dari seluruh penerimaan pajak.
+                  <a class="citation" href="#ref-2">2</a>
+                </p>
+
+                <div class="bg-navy-50 p-4 rounded text-xs text-navy-600">
+                  Dalam Rancangan Anggaran Pendapatan dan Belanja Negara (RAPBN) 2003, pemerintah menargetkan penerimaan pajak sebesar Rp.260,8 Triliun untuk menutupi 73,7% dari anggaran belanja negara.
+                  <a class="citation" href="#ref-1">1</a>
+                </div>
+              </div>
+
+              <div class="bg-white p-6 rounded-lg shadow-sm">
+                <h4 class="text-lg font-semibold text-navy-700 mb-4">Risiko Volatilitas Penerimaan</h4>
+                <p class="text-navy-600 text-sm mb-4">
+                  Ketergantungan yang tinggi pada pajak sebagai sumber utama pendapatan negara juga membawa risiko volatilitas. Penerimaan pajak sangat sensitif terhadap kondisi ekonomi makro. Perubahan dalam pertumbuhan ekonomi, inflasi, investasi, dan nilai tukar mata uang dapat secara signifikan memengaruhi penerimaan pajak.
+                  <a class="citation" href="#ref-1">1</a>
+                </p>
+                <p class="text-navy-600 text-sm">
+                  Selain itu, pergeseran pola konsumsi masyarakat ke arah digital juga dapat menyebabkan peningkatan shadow economy, yang berpotensi menyebabkan kehilangan basis pajak atau wajib pajak.
+                  <a class="citation" href="#ref-3">3</a>
+                </p>
+              </div>
+            </div>
+
+            <!-- Implikasi pada Anggaran -->
+            <div>
+              <h3 class="text-2xl font-serif font-medium text-navy-800 mb-6">4.2 Implikasi pada Anggaran</h3>
+
+              <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                  <h4 class="text-lg font-semibold text-navy-700 mb-4">Fleksibilitas Fiskal dan Prioritas Belanja</h4>
+                  <p class="text-navy-600 text-sm mb-4">
+                    Ketergantungan yang tinggi pada pajak membatasi fleksibilitas fiskal pemerintah. Ketika penerimaan pajak mengalami shortfall, pemerintah harus melakukan penyesuaian belanja, baik dengan menunda atau membatalkan proyek-proyek tertentu, atau dengan mencari sumber pendanaan lain, seperti utang.
+                  </p>
+                  <p class="text-navy-600 text-sm">
+                    Keterbatasan anggaran juga memaksa pemerintah untuk menetapkan prioritas belanja yang jelas antara infrastruktur, pendidikan, kesehatan, atau program sosial.
+                  </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                  <h4 class="text-lg font-semibold text-navy-700 mb-4">Tantangan dalam Pembiayaan Program</h4>
+                  <p class="text-navy-600 text-sm mb-4">
+                    Peningkatan penerimaan pajak yang signifikan diperlukan untuk membiayai program-program sosial dan pembangunan infrastruktur yang semakin besar. Namun, volatilitas penerimaan pajak dapat menjadi tantangan dalam pembiayaan program-program ini.
+                  </p>
+                  <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded text-xs text-yellow-700">
+                    Jika penerimaan pajak tidak mencapai target, maka pemerintah akan kesulitan untuk memenuhi komitmennya dalam membiayai program-program tersebut, yang dapat berdampak pada kesejahteraan masyarakat, terutama kelompok rentan.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Perbandingan Internasional -->
+      <section class="py-16 px-8" id="comparison">
+        <div class="container mx-auto max-w-6xl">
+          <h2 class="text-4xl font-serif font-semibold text-navy-900 mb-12 text-center">Perbandingan dengan Negara Lain</h2>
+
+          <div class="space-y-12">
+            <!-- Indonesia vs Arab Saudi -->
+            <div>
+              <h3 class="text-3xl font-serif font-medium text-navy-800 mb-8">5.1 Indonesia vs. Arab Saudi</h3>
+
+              <div class="grid lg:grid-cols-2 gap-8 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                  <h4 class="text-xl font-semibold text-navy-700 mb-4">Perbedaan Struktur Pendapatan</h4>
+                  <p class="text-navy-600 text-sm mb-4">
+                    Perbedaan paling mencolok antara Indonesia dan Arab Saudi terletak pada sumber utama pendapatan negara. Pada tahun 2024, Indonesia menargetkan penerimaan negara sebesar Rp2.802,3 triliun, dengan kontribusi terbesar berasal dari sektor perpajakan sebesar Rp2.309,9 triliun, atau setara dengan 82,4% dari total penerimaan negara.
+                    <a class="citation" href="#ref-65">65</a>
+                  </p>
+                  <p class="text-navy-600 text-sm">
+                    Sementara itu, Arab Saudi memiliki struktur pendapatan yang sangat berbeda. Pendapatan negara didominasi oleh sektor minyak dan gas. Pada tahun 2023, sekitar 62% dari total pendapatan negara Arab Saudi berasal dari minyak.
+                    <a class="citation" href="#ref-83">83</a>
+                  </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                  <h4 class="text-xl font-semibold text-navy-700 mb-4">Dampak pada Stabilitas Fiskal</h4>
+                  <p class="text-navy-600 text-sm mb-4">
+                    Bagi Indonesia, ketergantungan yang tinggi pada pajak membuat penerimaan negara cukup sensitif terhadap kondisi ekonomi domestik. Rasio pajak Indonesia, yang berada di kisaran 10-11% dari PDB, masih tergolong rendah dibandingkan dengan negara-negara berkembang lainnya.
+                    <a class="citation" href="#ref-66">66</a>
+                    <a class="citation" href="#ref-69">69</a>
+                  </p>
+                  <p class="text-navy-600 text-sm">
+                    Sebaliknya, Arab Saudi menghadapi tantangan stabilitas fiskal yang berasal dari volatilitas harga minyak dunia. Ketika harga minyak tinggi, negara ini mengalami surplus anggaran yang besar, namun ketika harga minyak turun, defisit anggaran dapat membengkak dengan cepat.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Comparison Table -->
+              <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="bg-navy-600 text-white p-4">
+                  <h5 class="text-lg font-semibold">Perbandingan Indonesia vs Arab Saudi</h5>
+                </div>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-sm">
+                    <thead class="bg-navy-50">
+                      <tr>
+                        <th class="text-left p-3 font-semibold text-navy-800">Aspek</th>
+                        <th class="text-left p-3 font-semibold text-navy-800">Indonesia</th>
+                        <th class="text-left p-3 font-semibold text-navy-800">Arab Saudi</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-navy-100">
+                      <tr>
+                        <td class="p-3 font-medium text-navy-700">Sumber Utama Pendapatan</td>
+                        <td class="p-3 text-navy-600">Perpajakan Domestik (PPh, PPN)</td>
+                        <td class="p-3 text-navy-600">Ekspor Minyak dan Gas</td>
+                      </tr>
+                      <tr>
+                        <td class="p-3 font-medium text-navy-700">Kontribusi Pajak</td>
+                        <td class="p-3 text-navy-600">82,4% (Tahun 2024)</td>
+                        <td class="p-3 text-navy-600">Relatif kecil, baru mulai dikembangkan</td>
+                      </tr>
+                      <tr>
+                        <td class="p-3 font-medium text-navy-700">Kontribusi Minyak</td>
+                        <td class="p-3 text-navy-600">Menurun drastis (sekitar 7% tahun 2023)</td>
+                        <td class="p-3 text-navy-600">Dominan (sekitar 62% tahun 2023)</td>
+                      </tr>
+                      <tr>
+                        <td class="p-3 font-medium text-navy-700">PPh Orang Pribadi</td>
+                        <td class="p-3 text-navy-600">Progresif (5% - 35%)</td>
+                        <td class="p-3 text-navy-600">Tidak dikenakan bagi warga Saudi dan GCC</td>
+                      </tr>
+                      <tr>
+                        <td class="p-3 font-medium text-navy-700">PPN</td>
+                        <td class="p-3 text-navy-600">11% (direncanakan naik menjadi 12%)</td>
+                        <td class="p-3 text-navy-600">15% (dinaikkan dari 5% pada tahun 2020)</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Indonesia vs Singapura -->
+            <div>
+              <h3 class="text-3xl font-serif font-medium text-navy-800 mb-8">5.2 Indonesia vs. Singapura</h3>
+
+              <div class="grid lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                  <h4 class="text-xl font-semibold text-navy-700 mb-4">Model Ekonomi Berbasis Pajak</h4>
+                  <p class="text-navy-600 text-sm mb-4">
+                    Singapura merupakan contoh utama dari sebuah negara yang secara strategis membangun fondasi ekonominya di atas sektor publik yang bersih, profesional, dan efisien, serta sistem perpajakan yang kompetitif, tanpa mengandalkan kekayaan alam.
+                    <a class="citation" href="#ref-333">333</a>
+                    <a class="citation" href="#ref-335">335</a>
+                  </p>
+                  <p class="text-navy-600 text-sm">
+                    Berbeda dengan Indonesia yang masih menerima kontribusi signifikan dari sektor minyak dan gas, Singapura hampir sepenuhnya bergantung pada penerimaan dari pajak penghasilan individu dan badan, serta Pajak Barang dan Jasa (GST).
+                    <a class="citation" href="#ref-330">330</a>
+                    <a class="citation" href="#ref-336">336</a>
+                  </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                  <h4 class="text-xl font-semibold text-navy-700 mb-4">Perbandingan Rasio Pajak terhadap PDB</h4>
+                  <p class="text-navy-600 text-sm mb-4">
+                    Berdasarkan data perbandingan rasio pajak di negara-negara ASEAN pada tahun 2017, Indonesia berada di posisi kedua terbawah dengan rasio pajak sebesar 11,5%. Angka ini jauh di bawah Singapura yang mencapai 14,1%.
+                    <a class="citation" href="#ref-21">21</a>
+                  </p>
+
+                  <div class="bg-navy-50 p-4 rounded">
+                    <h5 class="font-semibold text-navy-800 mb-2">Kemudahan Berbisnis 2017</h5>
+                    <div class="flex justify-between items-center text-sm">
+                      <span class="text-navy-600">Singapura</span>
+                      <span class="font-semibold text-navy-800">Peringkat ke-2 dunia</span>
+                    </div>
+                    <div class="flex justify-between items-center text-sm mt-1">
+                      <span class="text-navy-600">Indonesia</span>
+                      <span class="font-semibold text-navy-800">Peringkat ke-91 dunia</span>
+                    </div>
+                    <a class="citation" href="#ref-342">342</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Jenis Pajak Tertentu -->
+      <section class="py-16 px-8 bg-warm-50" id="tax-types">
+        <div class="container mx-auto max-w-6xl">
+          <h2 class="text-4xl font-serif font-semibold text-navy-900 mb-12 text-center">Efek dari Jenis Pajak Tertentu</h2>
+
+          <div class="grid lg:grid-cols-3 gap-8">
+            <!-- PPN -->
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+              <div class="flex items-center mb-4">
+                <div class="w-10 h-10 bg-navy-600 text-white rounded-lg flex items-center justify-center mr-3">
+                  <i class="fas fa-percentage"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-navy-800">6.1 PPN</h3>
+              </div>
+
+              <div class="space-y-4">
+                <div>
+                  <h4 class="font-semibold text-navy-700 mb-2">Sumber Pendapatan Utama</h4>
+                  <p class="text-sm text-navy-600">
+                    Pajak Pertambahan Nilai (PPN) merupakan salah satu sumber penerimaan negara yang paling signifikan di Indonesia. Sebagai pajak tidak langsung yang dikenakan pada konsumsi barang dan jasa, PPN memiliki basis yang sangat luas, mencakup hampir seluruh transaksi di dalam perekonomian.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 class="font-semibold text-navy-700 mb-2">Dampak pada Konsumsi</h4>
+                  <p class="text-sm text-navy-600">
+                    Kebijakan PPN yang berfokus pada peningkatan penerimaan negara memiliki dampak yang signifikan terhadap konsumsi dan inflasi. Kenaikan tarif PPN secara langsung akan meningkatkan harga barang dan jasa, yang pada gilirannya dapat menurunkan daya beli masyarakat.
+                    <a class="citation" href="#ref-2">2</a>
+                  </p>
+                </div>
+
+                <div>
+                  <h4 class="font-semibold text-navy-700 mb-2">Implikasi Sosial</h4>
+                  <p class="text-sm text-navy-600">
+                    Kenaikan tarif PPN memiliki implikasi sosial dan ekonomi yang luas. Dari sisi sosial, kenaikan PPN cenderung bersifat regresif, di mana dampaknya lebih berat dirasakan oleh kelompok masyarakat menengah ke bawah.
+                    <a class="citation" href="#ref-2">2</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- PPh -->
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+              <div class="flex items-center mb-4">
+                <div class="w-10 h-10 bg-navy-600 text-white rounded-lg flex items-center justify-center mr-3">
+                  <i class="fas fa-user-tie"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-navy-800">6.2 PPh</h3>
+              </div>
+
+              <div class="space-y-4">
+                <div>
+                  <h4 class="font-semibold text-navy-700 mb-2">Distribusi Pendapatan</h4>
+                  <p class="text-sm text-navy-600">
+                    Pajak Penghasilan (PPh) secara teoritis merupakan instrumen utama dalam kebijakan fiskal untuk mengurangi ketimpangan pendapatan. Namun, dalam praktiknya di Indonesia, efektivitas PPh dalam mengurangi kesenjangan masih terbatas.
+                    <a class="citation" href="#ref-245">245</a>
+                  </p>
+                </div>
+
+                <div>
+                  <h4 class="font-semibold text-navy-700 mb-2">Reformasi PPh</h4>
+                  <p class="text-sm text-navy-600">
+                    Reformasi PPh yang bertujuan untuk meningkatkan penerimaan negara dapat berdampak signifikan terhadap kemiskinan dan ketimpangan. Jika reformasi tersebut berfokus pada peningkatan tarif PPh untuk kelompok berpenghasilan tinggi dan memperluas basis pajak, maka dapat membantu mengurangi kesenjangan pendapatan.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 class="font-semibold text-navy-700 mb-2">Insentif Sektor Padat Karya</h4>
+                  <p class="text-sm text-navy-600">
+                    Pemerintah dapat menggunakan PPh sebagai instrumen untuk mendorong penciptaan lapangan kerja, terutama di sektor padat karya. Pemberian insentif pajak, seperti pembebasan atau pengurangan PPh, bagi perusahaan yang mempekerjakan banyak tenaga kerja.
+                    <a class="citation" href="#ref-28">28</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cukai -->
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+              <div class="flex items-center mb-4">
+                <div class="w-10 h-10 bg-navy-600 text-white rounded-lg flex items-center justify-center mr-3">
+                  <i class="fas fa-smoking"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-navy-800">6.3 Cukai</h3>
+              </div>
+
+              <div class="space-y-4">
+                <div>
+                  <h4 class="font-semibold text-navy-700 mb-2">Fungsi Ganda</h4>
+                  <p class="text-sm text-navy-600">
+                    Cukai di Indonesia merupakan instrumen fiskal yang memiliki peran ganda, yaitu sebagai sumber penerimaan negara dan sebagai alat untuk mengendalikan konsumsi barang-barang tertentu yang memiliki dampak negatif terhadap kesehatan masyarakat dan lingkungan.
+                    <a class="citation" href="#ref-290">290</a>
+                  </p>
+                </div>
+
+                <div>
+                  <h4 class="font-semibold text-navy-700 mb-2">Dampak Cukai Rokok</h4>
+                  <p class="text-sm text-navy-600">
+                    Kebijakan cukai rokok di Indonesia memiliki dampak yang signifikan terhadap kesehatan masyarakat dan perekonomian. Kenaikan cukai tembakau antara 12,5% hingga 200% dapat mengurangi jumlah perokok sebanyak 0,5 hingga 8,0 juta orang.
+                    <a class="citation" href="#ref-295">295</a>
+                  </p>
+                </div>
+
+                <div>
+                  <h4 class="font-semibold text-navy-700 mb-2">Cukai Minuman Berpemanis</h4>
+                  <p class="text-sm text-navy-600">
+                    Pemerintah Indonesia juga sedang mempertimbangkan penerapan cukai untuk minuman berpemanis dalam kemasan (MBDK). Penerapan cukai MBDK diperkirakan akan memberikan dampak ekonomi dan sosial yang signifikan.
+                    <a class="citation" href="#ref-314">314</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Conclusion -->
+      <section class="py-16 px-8 bg-navy-900 text-white">
+        <div class="container mx-auto max-w-4xl text-center">
+          <h2 class="text-3xl font-serif font-semibold mb-8">Kesimpulan</h2>
+          <div class="prose prose-lg prose-invert max-w-none">
+            <p class="text-xl leading-relaxed mb-6">
+              Analisis komprehensif ini mengungkapkan kompleksitas dampak dari fokus pendapatan negara yang berlebihan pada sektor pajak. Sementara pajak memang menjadi sumber vital untuk mendanai pembangunan, kebijakan yang tidak hati-hati dapat menciptakan efek domino yang merugikan bagi perekonomian dan masyarakat.
+            </p>
+            <p class="text-lg leading-relaxed">
+              Pemerintah perlu menyeimbangkan antara kebutuhan penerimaan negara dengan dampak sosial-ekonomi yang ditimbulkan. Reformasi perpajakan yang komprehensif, transparan, dan berkeadilan menjadi kunci untuk menciptakan sistem yang lebih efisien dan berkelanjutan, sambil meminimalkan dampak negatif terhadap pertumbuhan ekonomi, ketenagakerjaan, dan kesejahteraan masyarakat.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- References -->
+      <section class="py-12 px-8 bg-warm-50">
+        <div class="container mx-auto max-w-6xl">
+          <h2 class="text-2xl font-serif font-semibold text-navy-900 mb-8">Referensi</h2>
+          <div class="grid lg:grid-cols-2 gap-4 text-xs text-navy-600">
+            <div class="space-y-2">
+              <div id="ref-1">[1] <a class="text-navy-700 hover:underline" href="https://journal.trunojoyo.ac.id/neo-bis/article/download/561/531">Journal Trunojoyo - Analisis Penerimaan Pajak</a>
+              </div>
+              <div id="ref-2">[2] <a class="text-navy-700 hover:underline" href="https://sites.unnes.ac.id/kimefe/2025/01/dampak-kenaikan-pajak-pertambahan-nilai-12-terhadap-tingkat-konsumsi-masyarakat-indonesia/">Unnes - Dampak Kenaikan PPN</a>
+              </div>
+              <div id="ref-3">[3] <a class="text-navy-700 hover:underline" href="https://news.ddtc.co.id/berita/nasional/39287/begini-dampak-perubahan-ekonomi-makro-terhadap-penerimaan-perpajakan">DDTC - Dampak Ekonomi Makro</a>
+              </div>
+              <div id="ref-21">[21] <a class="text-navy-700 hover:underline" href="https://klikpajak.id/blog/perbandingan-rasio-pajak-negara-asean/">KlikPajak - Perbandingan Rasio Pajak ASEAN</a>
+              </div>
+              <div id="ref-28">[28] <a class="text-navy-700 hover:underline" href="https://www.gaji.id/id/2024/12/26/pemerintah-siapkan-rangkaian-stimulus-untuk-antisipasi-dampak-ppn-12-persen-bagi-pekerja/">Gaji.id - Stimulus PPN 12%</a>
+              </div>
+              <div id="ref-33">[33] <a class="text-navy-700 hover:underline" href="https://deadline-news.com/pajak-bikin-pengangguran/">Deadline News - Pajak dan Pengangguran</a>
+              </div>
+              <div id="ref-49">[49] <a class="text-navy-700 hover:underline" href="https://sites.unnes.ac.id/kimefe/2025/01/dampak-kenaikan-pajak-pertambahan-nilai-12-terhadap-tingkat-konsumsi-masyarakat-indonesia/">Unnes - Dampak PPN pada Konsumsi</a>
+              </div>
+              <div id="ref-65">[65] <a class="text-navy-700 hover:underline" href="https://goodstats.id/article/tahun-2024-82-4-penerimaan-negara-berasal-dari-pajak-lJA5f">GoodStats - Penerimaan Negara 2024</a>
+              </div>
+              <div id="ref-66">[66] <a class="text-navy-700 hover:underline" href="https://klikpajak.id/blog/rasio-pajak/">KlikPajak - Rasio Pajak</a>
+              </div>
+              <div id="ref-69">[69] <a class="text-navy-700 hover:underline" href="https://repository.theprakarsa.org/publications/653/rasio-pajak-rendah-utang-makin-menumpuk-rasio-pajak-negara-miskin-lebih-tinggi-d">The Prakarsa - Rasio Pajak Rendah</a>
+              </div>
+              <div id="ref-70">[70] <a class="text-navy-700 hover:underline" href="https://journal.literasisains.id/index.php/mamen/article/download/5759/2278/27732">Literasi Sains - Strategi Fiskal</a>
+              </div>
+              <div id="ref-77">[77] <a class="text-navy-700 hover:underline" href="https://www.pajak.com/pajak/menang-2-0-di-lapangan-bagaimana-indonesia-dan-arab-saudi-berhadapan-dalam-kebijakan-pajak/">Pajak.com - Indonesia vs Arab Saudi</a>
+              </div>
+              <div id="ref-81">[81] <a class="text-navy-700 hover:underline" href="https://akuprim.com/menang-2-0-di-lapangan-bagaimana-indonesia-dan-arab-saudi-berhadapan-dalam-kebijakan-pajak/">AkuPrim - Kebijakan Pajak</a>
+              </div>
+              <div id="ref-82">[82] <a class="text-navy-700 hover:underline" href="https://versus.com/id/arab-saudi-vs-indonesia">Versus.com - Arab Saudi vs Indonesia</a>
+              </div>
+              <div id="ref-83">[83] <a class="text-navy-700 hover:underline" href="https://www.cnbcindonesia.com/research/20240528034005-128-541623/wisata-arab-saudi-cuan-rp-2700-t-dari-haji-setara-pendapatan-ri">CNBC Indonesia - Pendapatan Arab Saudi</a>
+              </div>
+              <div id="ref-90">[90] <a class="text-navy-700 hover:underline" href="https://www.liputan6.com/bisnis/read/3217990/tarik-pajak-5-persen-daya-beli-warga-arab-saudi-bakal-turun">Liputan6 - Daya Beli Arab Saudi</a>
+              </div>
+              <div id="ref-91">[91] <a class="text-navy-700 hover:underline" href="https://www.suarasurabaya.net/kelanakota/2024/berbelanja-di-tanah-suci-lebih-mahal-daripada-di-indonesia-karena-kenaikan-pajak-ppn-arab-saudi/">Suara Surabaya - PPN Arab Saudi</a>
+              </div>
+              <div id="ref-92">[92] <a class="text-navy-700 hover:underline" href="https://swa.co.id/read/453296/tarif-ppn-indonesia-termasuk-paling-rendah-benarkah-ini-perbandingannya-dengan-negara-lain">SWA - Tarif PPN Indonesia</a>
+              </div>
+              <div id="ref-151">[151] <a class="text-navy-700 hover:underline" href="https://www.oecd.org/content/dam/oecd/en/publications/reports/2012/10/improving-the-tax-system-in-indonesia_g17a21d0/5k912j3r2qmr-en.pdf">OECD - Improving Tax System Indonesia</a>
+              </div>
+              <div id="ref-177">[177] <a class="text-navy-700 hover:underline" href="http://download.garuda.kemdikbud.go.id/article.php?article=1223281&amp;val=11262&amp;title=Pengaruh%20pajak%20penghasilan%20badan%20terhadap%20permintaan%20tenaga%20kerja%20pada%20perusahaan%20manufaktur">Garuda Kemdikbud - PPh Badan dan Tenaga Kerja</a>
+              </div>
+              <div id="ref-187">[187] <a class="text-navy-700 hover:underline" href="https://jakartaglobe.id/business/vat-hike-will-hamper-exports-increase-unemployment-indef">Jakarta Globe - Dampak Kenaikan PPN</a>
+              </div>
+              <div id="ref-223">[223] <a class="text-navy-700 hover:underline" href="https://www.um-surabaya.ac.id/article/pengangguran-di-indonesia-meningkat-pakar-um-surabaya-pemerintah-harus-bertindak-cepat-dan-tepat">UM Surabaya - Pengangguran Meningkat</a>
+              </div>
+              <div id="ref-230">[230] <a class="text-navy-700 hover:underline" href="https://www.kompasiana.com/teguhimansantoso0950/673e69f2c925c43b226193d6/tax-policies-and-income-inequality-in-indonesia?page=all&amp;page_images=2">Kompasiana - Tax Policies and Inequality</a>
+              </div>
+              <div id="ref-233">[233] <a class="text-navy-700 hover:underline" href="https://scholar.ui.ac.id/files/104990034/Tax_Revenue_and_Income_Inequality_in_Indonesia_A_Provincial_Level.pdf">UI Scholar - Tax Revenue and Inequality</a>
+              </div>
+              <div id="ref-237">[237] <a class="text-navy-700 hover:underline" href="https://lib.ui.ac.id/detail?id=20403900&amp;lokasi=lokal">UI Library - Flat Tax Rate Analysis</a>
+              </div>
+              <div id="ref-239">[239] <a class="text-navy-700 hover:underline" href="https://www.kompasiana.com/teguhimansantoso0950/673e69f2c925c43b226193d6/tax-policies-and-income-inequality-in-indonesia?page=all&amp;page_images=2">Kompasiana - Tax and Inequality</a>
+              </div>
+              <div id="ref-240">[240] <a class="text-navy-700 hover:underline" href="https://www.mdpi.com/2227-7099/12/12/316">MDPI - Fiscal Policy Analysis</a>
+              </div>
+              <div id="ref-245">[245] <a class="text-navy-700 hover:underline" href="https://www.researchgate.net/publication/257099159_The_impact_of_the_Indonesian_income_tax_reform_A_CGE_analysis">ResearchGate - Income Tax Reform Impact</a>
+              </div>
+              <div id="ref-247">[247] <a class="text-navy-700 hover:underline" href="https://www.researchgate.net/publication/326977611_The_Effect_Of_Economic_Growth_And_Income_Inequality_On_Poverty_In_Indonesia">ResearchGate - Growth and Inequality</a>
+              </div>
+              <div id="ref-262">[262] <a class="text-navy-700 hover:underline" href="https://www.um-surabaya.ac.id/article/pengangguran-di-indonesia-meningkat-pakar-um-surabaya-pemerintah-harus-bertindak-cepat-dan-tepat">UM Surabaya - Pemerintah Harus Bertindak</a>
+              </div>
+              <div id="ref-273">[273] <a class="text-navy-700 hover:underline" href="https://www.um-surabaya.ac.id/article/dampak-kenaikan-ppn-jadi-12-pakar-ekonomi-um-surabaya-pengaruhi-stabilitas-ekonomi-nasional">UM Surabaya - Dampak PPN 12%</a>
+              </div>
+              <div id="ref-280">[280] <a class="text-navy-700 hover:underline" href="https://jakartaglobe.id/business/vat-hike-will-hamper-exports-increase-unemployment-indef">Jakarta Globe - PPN Hambat Ekspor</a>
+              </div>
+              <div id="ref-281">[281] <a class="text-navy-700 hover:underline" href="https://journal.jis-institute.org/index.php/icbem/article/download/2615/1844/13626">JIS Institute - PPN dan Ekonomi</a>
+              </div>
+              <div id="ref-289">[289] <a class="text-navy-700 hover:underline" href="https://myrobin.id/untuk-bisnis/bea-cukai/">MyRobin - Bea Cukai</a>
+              </div>
+              <div id="ref-290">[290] <a class="text-navy-700 hover:underline" href="https://mediakeuangan.kemenkeu.go.id/article/show/pungutan-cukai-kendalikan-impak-negatif">Media Keuangan - Pungutan Cukai</a>
+              </div>
+              <div id="ref-295">[295] <a class="text-navy-700 hover:underline" href="https://www.tobaccoinduceddiseases.org/The-impact-of-tobacco-excise-tax-increase-on-cigarette-consumption-mortality-medical,206214,0,2.html">Tobacco Induced Diseases - Tobacco Tax Impact</a>
+              </div>
+              <div id="ref-299">[299] <a class="text-navy-700 hover:underline" href="https://ejournal.pps-unisti.ac.id/index.php/JIASK/article/download/251/200">Unisti - Dampak Cukai Rokok</a>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <div id="ref-301">[301] <a class="text-navy-700 hover:underline" href="https://artikel.pajakku.com/dampak-kenaikan-tarif-cukai-akankah-produksi-rokok-menurun">Pajakku - Dampak Kenaikan Cukai</a>
+              </div>
+              <div id="ref-314">[314] <a class="text-navy-700 hover:underline" href="https://muc.co.id/en/article/the-ethical-dilemma-behind-the-postponement-of-excise-on-sweetened-drinks">MUC - Cukai Minuman Berpemanis</a>
+              </div>
+              <div id="ref-315">[315] <a class="text-navy-700 hover:underline" href="https://ijebmr.com/uploads/pdf/archivepdf/2025/IJEBMR_1539.pdf">IJEBMR - Cukai Minuman Berpemanis</a>
+              </div>
+              <div id="ref-322">[322] <a class="text-navy-700 hover:underline" href="https://www.cnbcindonesia.com/research/20230705104751-128-451467/ri-naik-kelas-tapi-masih-jauh-dari-malaysia-dan-singapura">CNBC Indonesia - RI Naik Kelas</a>
+              </div>
+              <div id="ref-323">[323] <a class="text-navy-700 hover:underline" href="https://flip.id/blog/perekonomian-singapura-vs-indonesia">Flip - Perekonomian SG vs ID</a>
+              </div>
+              <div id="ref-330">[330] <a class="text-navy-700 hover:underline" href="https://jdintl.econ.queensu.ca/publications/qed_dp_129.pdf">Queen's University - Tax Policy</a>
+              </div>
+              <div id="ref-333">[333] <a class="text-navy-700 hover:underline" href="https://belitongekspres.bacakoran.co/read/16441/5-rahasia-singapura-jadi-negara-kaya-raya-bangkit-dari-kemiskinan-tanpa-sda">Belitong Ekspres - Rahasia Singapura</a>
+              </div>
+              <div id="ref-335">[335] <a class="text-navy-700 hover:underline" href="https://www.suarabelantaraborneo.com/riset-literasi/1175093644/keunggulan-singapura-negara-tanpa-sumber-daya-alam-namun-mendunia-dalam-perekonomian">Suara Belantara Borneo - Keunggulan Singapura</a>
+              </div>
+              <div id="ref-336">[336] <a class="text-navy-700 hover:underline" href="https://www.kompasiana.com/kinkdapinnn/685a9f2b34777c5fd01fe102/perbandingan-sistem-pajak-indonesia-vs-singapura-dalam-mengatur-pajak-penghasilan-badan">Kompasiana - Perbandingan Sistem Pajak</a>
+              </div>
+              <div id="ref-339">[339] <a class="text-navy-700 hover:underline" href="https://portal.fiskal.kemenkeu.go.id/pustaka/index.php?p=fstream-pdf&amp;fid=1275&amp;bid=5148">Kemenkeu - Analisis FDI</a>
+              </div>
+              <div id="ref-340">[340] <a class="text-navy-700 hover:underline" href="https://www.thejakartapost.com/academia/2020/02/12/how-indonesia-singapore-tax-treaty-may-impact-trade-investment.html">Jakarta Post - Tax Treaty Impact</a>
+              </div>
+              <div id="ref-342">[342] <a class="text-navy-700 hover:underline" href="https://singapore-incorporations.com/singapore-vs-indonesia/">Singapore Incorporations - SG vs ID</a>
+              </div>
+              <div id="ref-8">[8] <a class="text-navy-700 hover:underline" href="https://journal.yibri.id/index.php/brijief/article/download/49/32/137">YIBRI - Kebijakan Ekonomi</a>
+              </div>
+              <div id="ref-10">[10] <a class="text-navy-700 hover:underline" href="https://finfloo.com/dampak-pajak-terhadap-ekonomi/">Finfloo - Dampak Pajak</a>
+              </div>
+              <div id="ref-11">[11] <a class="text-navy-700 hover:underline" href="https://jdih.tanahlautkab.go.id/artikel_hukum/detail/pengaruh-pajak-besar-dalam-satu-negara/pengaruh-pajak-besar-dalam-satu-negara">JDIH Tanah Laut - Pengaruh Pajak</a>
+              </div>
+              <div id="ref-63">[63] <a class="text-navy-700 hover:underline" href="https://www.indonesia-investments.com/id/bisnis/komoditas/minyak-bumi/item267">Indonesia Investments - Minyak Bumi</a>
+              </div>
+              <div id="ref-68">[68] <a class="text-navy-700 hover:underline" href="https://ejournal.appihi.or.id/index.php/Desentralisasi/article/download/774/858/3949">Appihi - Desentralisasi Pajak</a>
+              </div>
+              <div id="ref-72">[72] <a class="text-navy-700 hover:underline" href="https://www.suarasurabaya.net/kelanakota/2024/berbelanja-di-tanah-suci-lebih-mahal-daripada-di-indonesia-karena-kenaikan-pajak-ppn-arab-saudi/">Suara Surabaya - PPN Arab Saudi</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="bg-navy-900 text-white py-8 px-8">
+        <div class="container mx-auto text-center">
+          <p class="text-sm text-warm-100">
+            2025 Analisis Dampak Fokus Pendapatan Negara dari Pajak. Semua data dan referensi bersumber dari penelitian dan publikasi terpercaya.
+          </p>
+        </div>
+      </footer>
+    </main>
+
+    <script>
+        // Initialize Vanta.js background
+        VANTA.WAVES({
+            el: "#vanta-bg",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0x102a43,
+            shininess: 30.00,
+            waveHeight: 15.00,
+            waveSpeed: 0.75,
+            zoom: 0.65
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Highlight active section in TOC
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('section[id]');
+            const tocLinks = document.querySelectorAll('.toc-fixed a');
+            
+            let currentSection = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                if (window.scrollY >= sectionTop) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+            
+            tocLinks.forEach(link => {
+                link.classList.remove('bg-navy-100', 'text-navy-900');
+                if (link.getAttribute('href') === '#' + currentSection) {
+                    link.classList.add('bg-navy-100', 'text-navy-900');
+                }
+            });
+        });
+
+        // Add scroll indicator for TOC
+        const toc = document.querySelector('.toc-fixed');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                toc.classList.add('top-8');
+                toc.classList.remove('top-1/2', '-translate-y-1/2');
+            } else {
+                toc.classList.remove('top-8');
+                toc.classList.add('top-1/2', '-translate-y-1/2');
+            }
+        });
+
+        // Initialize tooltips for citations
+        tippy('.citation', {
+            content: 'Klik untuk melihat referensi',
+            placement: 'top',
+            animation: 'scale',
+            theme: 'light',
+            arrow: true
+        });
+    </script>
+
+  </body>
+
+</html>
