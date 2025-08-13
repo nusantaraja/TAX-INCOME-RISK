@@ -32,5 +32,5 @@ Dokumen ini dapat digunakan sebagai sumber referensi untuk memahami dampak fokus
 ## Kontribusi
 Kami terbuka untuk kontribusi dari semua pihak. Jika Anda memiliki saran atau ingin berkontribusi, silakan buka issue atau pull request di repositori ini.
 
-## Lisensi
-Proyek ini dilisensikan di bawah lisensi [MIT](LICENSE).
+## Web Blog
+Analisa ini dipublikasikan pada web [Analisis Dampak Fokus Pendapatan Negara dari Pajak ](https://nusantaraja.github.io/TAX-INCOME-RISK/).
