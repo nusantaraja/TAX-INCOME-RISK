@@ -32,5 +32,6 @@ Dokumen ini dapat digunakan sebagai sumber referensi untuk memahami dampak fokus
 ## Kontribusi
 Kami terbuka untuk kontribusi dari semua pihak. Jika Anda memiliki saran atau ingin berkontribusi, silakan buka issue atau pull request di repositori ini.
 
-## Web Blog
-Analisa ini dipublikasikan pada web [Analisis Dampak Fokus Pendapatan Negara dari Pajak ](https://nusantaraja.github.io/TAX-INCOME-RISK/).
+## Publikasi Analisis
+Baca laporan lengkap di:  
+<a href="https://nusantaraja.github.io/TAX-INCOME-RISK/" target="_blank" rel="noopener noreferrer">Analisis Dampak Fokus Pendapatan Negara dari Pajak</a>.s
