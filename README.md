@@ -34,4 +34,4 @@ Kami terbuka untuk kontribusi dari semua pihak. Jika Anda memiliki saran atau in
 
 ## Publikasi Analisis
 Baca laporan lengkap di:  
-<a href="https://nusantaraja.github.io/TAX-INCOME-RISK/" target="_blank" rel="noopener noreferrer">Analisis Dampak Fokus Pendapatan Negara dari Pajak</a>.s
+<a href="https://nusantaraja.github.io/TAX-INCOME-RISK/" target="_blank" rel="noopener noreferrer">Analisis Dampak Fokus Pendapatan Negara dari Pajak</a>
